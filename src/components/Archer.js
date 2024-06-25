@@ -9,6 +9,13 @@ export default function Model({ action }) {
   const group = useRef()
   const { nodes, materials, animations } = useGLTF('/archer.glb')
   const { actions } = useAnimations(animations, group)
+  const previousAction = usePrevious(action);
+  useEffect(() => {
+    if(previousAction) {
+      actions[previousAction].stop();
+    }
+    actions[action].play();
+  }, [action, actions])
   return (
     <group ref={group} dispose={null}>
       <group name="Scene">
